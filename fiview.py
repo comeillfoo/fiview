@@ -53,7 +53,7 @@ def main( argc, argv ):
         with open( modpath, modes[ cmd ] ) as mod: 
             fprintf( stdout, hands[ cmd ]( mod, pid, fd, term ) )
     else:
-        ffprintf( stderr, main, f'module [ {modname} ] not found, please load it' )
+        fprintf( stdout, f'module [ {modname} ] not found, please load it' )
 
 
 if __name__ == '__main__':
