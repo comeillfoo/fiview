@@ -28,20 +28,28 @@ def comboboxes( ):
     return pds, fds
 
 
+def get_exec():
+    exec = sys.argv[ 0 ]
+    exec = exec.replace( 'fiview-gui.py', 'fiview.py' )
+    return exec
+
 def set_callback( pds, fds, out ):
+
+
+
     pid = pds.currentText()
     fd  = fds.currentText()
     if ( pid == '' or fd == '' ):
         out.setText( 'invalid parameters, please choose pid and the file descriptor' )
         return
     ffprintf( stderr, set_callback, f'[ pid={pid}, fd={fd} ]' )
-    bytes = sp.run( [ './fiview.py', 'set', f'{pid}', f'{fd}' ], check=True, stdout=sp.PIPE ).stdout.decode( 'UTF-8' )
+    bytes = sp.run( [ get_exec(), 'set', f'{pid}', f'{fd}' ], check=True, stdout=sp.PIPE ).stdout.decode( 'UTF-8' )
     ffprintf( stderr, set_callback, f'read [ {bytes} ]' )
     out.setText( bytes )
 
 
 def get_callback( out ):
-    response = sp.run( [ './fiview.py', 'get', '0', '0' ], check=True, stdout=sp.PIPE ).stdout.decode( 'UTF-8' ).splitlines( )
+    response = sp.run( [ get_exec(), 'get', '0', '0' ], check=True, stdout=sp.PIPE ).stdout.decode( 'UTF-8' ).splitlines( )
     response = '\n'.join( response )
     out.setText( response )
 

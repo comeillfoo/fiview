@@ -5,6 +5,11 @@ import json
 from misc import fprintf, ffprintf, is_exists
 from commands import name_comm, name_proc, name_all, hands, modes
 
+def get_path():
+    exec = sys.argv[ 0 ]
+    path = exec.replace( 'fiview.py', '' )
+    return path 
+
 def parse_config( path ):
     ffprintf( stderr, parse_config, 'started' )
     config = None
@@ -40,7 +45,7 @@ def main( argc, argv ):
         fprintf( stdout, hands[ cmd ]( pid ) )
         return 0
 
-    modname, moddir, term = parse_config( 'props.json' )
+    modname, moddir, term = parse_config( f'{get_path()}props.json' )
     modpath = f'{moddir}/{modname}'
 
     if ( is_exists( modpath ) ):
