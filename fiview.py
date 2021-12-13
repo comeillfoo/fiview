@@ -4,6 +4,7 @@ import sys
 import json
 from misc import fprintf, ffprintf, is_exists
 from commands import name_comm, name_proc, name_all, hands, modes
+import fcntl
 
 def get_path():
     exec = sys.argv[ 0 ]
@@ -18,7 +19,6 @@ def parse_config( path ):
         ffprintf( stderr, parse_config, 'parsed config:', config )
     ffprintf( stderr, parse_config, 'finished' )
     return config[ 'module_name' ], config[ 'module_dir' ], config[ 'term' ]
-
 
 def main( argc, argv ):
     if ( argc < 2 ):
@@ -55,8 +55,10 @@ def main( argc, argv ):
             fprintf( stdout, f'usage: {argv[ 0 ]} cmd pid fd' )
             return 1
         fd = int( argv[ 3 ] )
-        with open( modpath, modes[ cmd ] ) as mod: 
+        with open( modpath, modes[ cmd ] ) as mod:
+            fcntl.flock( mod.fileno(), fcntl.LOCK_EX ) 
             fprintf( stdout, hands[ cmd ]( mod, pid, fd, term ) )
+            fcntl.flock( mod.fileno(), fcntl.LOCK_UN )
     else:
         fprintf( stdout, f'module [ {modname} ] not found, please load it' )
 

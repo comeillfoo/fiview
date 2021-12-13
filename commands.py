@@ -1,4 +1,5 @@
 #! /usr/bin/python3
+import fcntl
 from sys import stderr
 from misc import get_available_tasks, get_available_fds, ffprintf
 import json
@@ -68,3 +69,4 @@ hand_proc = [ listfds ]
 hand_base = [ get, set ]
 hand_all = hand_comm + hand_proc + hand_base
 hands = { name_all[ i ]: hand_all[ i ] for i in range( len( name_all ) ) }
+
